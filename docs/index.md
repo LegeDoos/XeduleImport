@@ -8,7 +8,7 @@ Dit hulpmiddel is onstaan omdat er geen standaard tools zijn om je rooster goed 
 Installeer Xedule Import Helper door op de volgende link te klikken en de applicatie te installeren: [Xedule Import Helper Installer (latest)](https://legedoos.github.io/XeduleImport/Installer/Publish.html)
 
 ### Gebruik
-<wip>
+Work in progress
   
 ### Bijdragen
 Je kunt bijdragen aan dit project door naar de [Github pagina](https://github.com/LegeDoos/XeduleImport) te gaan en de code te downloaden. Beter nog is om een eigen branch te maken en je aanpassingen voor te stellen.
