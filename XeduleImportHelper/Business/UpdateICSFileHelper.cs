@@ -28,6 +28,7 @@ namespace XeduleImportHelper
         /// </summary>
         private string SourceICSFile { get; set; }
 
+        public string ResultFilename { get; private set; }
         /// <summary>
         /// Contsructor to construct the helper class
         /// </summary>
@@ -102,6 +103,7 @@ namespace XeduleImportHelper
                 throw new Exception("Error saving the new file", ex);
             }
 
+            ResultFilename = newFile;
             return newFile;
         }
     }
