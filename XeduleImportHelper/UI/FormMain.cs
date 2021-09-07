@@ -13,45 +13,41 @@ namespace XeduleImportHelper.UI
 {
     public partial class FormMain : Form
     {
-        public UpdateICSFileHelper icsHelper { get; set; }
+        public UpdateICSFileHelper IcsHelper { get; set; }
 
         public FormMain()
         {
             InitializeComponent();
         }
 
-        private void btnSelectICSFile_Click(object sender, EventArgs e)
+        private void BtnSelectICSFile_Click(object sender, EventArgs e)
         {
-            // Select the file
-            var fileContent = string.Empty;
-            var filePath = string.Empty;
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "ics files (*.ics)|*.ics";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                openFileDialog.Filter = "ics files (*.ics)|*.ics";
+                // Select the file
+                //Get the path of specified file
+                string filePath = openFileDialog.FileName;
+                lblFilename.Text = $"Selected file: {filePath}";
+                IcsHelper = new UpdateICSFileHelper(filePath);
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    //Get the path of specified file
-                    filePath = openFileDialog.FileName;
-                    lblFilename.Text = $"Selected file: {filePath}";
-                    icsHelper = new UpdateICSFileHelper(filePath);
-
-                    // enable process group
-                    groupProcess.Enabled = true;
-                }
+                // enable process group
+                groupProcess.Enabled = true;
             }
 
         }
 
-        private void btnProcessFile_Click(object sender, EventArgs e)
+        private void BtnProcessFile_Click(object sender, EventArgs e)
         {
             // process the file
-            if (icsHelper != null)
+            if (IcsHelper != null)
             {
-                icsHelper.AddXeduleCategory = cbAddCategory.Checked;
-                icsHelper.RemoveAllAttendees = cbRemoveAttendees.Checked;
-                icsHelper.HandleFile();
-                MessageBox.Show($"Result saved: {icsHelper.ResultFilename}");
+                IcsHelper.AddXeduleCategory = cbAddCategory.Checked;
+                IcsHelper.RemoveAllAttendees = cbRemoveAttendees.Checked;
+                IcsHelper.HandleFile();
+                MessageBox.Show($"Result saved: {IcsHelper.ResultFilename}");
             }
             else
             {

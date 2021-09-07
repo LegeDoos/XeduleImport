@@ -55,7 +55,7 @@ namespace XeduleImportHelper.UI
             this.btnSelectICSFile.TabIndex = 0;
             this.btnSelectICSFile.Text = "Select ICS file";
             this.btnSelectICSFile.UseVisualStyleBackColor = true;
-            this.btnSelectICSFile.Click += new System.EventHandler(this.btnSelectICSFile_Click);
+            this.btnSelectICSFile.Click += new System.EventHandler(this.BtnSelectICSFile_Click);
             // 
             // btnProcessFile
             // 
@@ -65,7 +65,7 @@ namespace XeduleImportHelper.UI
             this.btnProcessFile.TabIndex = 1;
             this.btnProcessFile.Text = "Process and save";
             this.btnProcessFile.UseVisualStyleBackColor = true;
-            this.btnProcessFile.Click += new System.EventHandler(this.btnProcessFile_Click);
+            this.btnProcessFile.Click += new System.EventHandler(this.BtnProcessFile_Click);
             // 
             // cbRemoveAttendees
             // 
