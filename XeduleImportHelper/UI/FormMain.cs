@@ -28,12 +28,12 @@ namespace XeduleImportHelper.UI
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 // Select the file
-                //Get the path of specified file
+                // Get the path of specified file
                 string filePath = openFileDialog.FileName;
                 lblFilename.Text = $"Selected file: {filePath}";
                 IcsHelper = new UpdateICSFileHelper(filePath);
 
-                // enable process group
+                // Enable process group
                 groupProcess.Enabled = true;
             }
 
