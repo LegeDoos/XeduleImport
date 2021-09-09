@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using XeduleImportHelper.Business;
 
 namespace XeduleImportHelper.UI
 {
@@ -34,7 +27,7 @@ namespace XeduleImportHelper.UI
                 IcsHelper = new UpdateICSFileHelper(filePath);
 
                 // Enable process group
-                groupProcess.Enabled = true;
+                groupBoxProcess.Enabled = true;
             }
 
         }
@@ -53,6 +46,11 @@ namespace XeduleImportHelper.UI
             {
                 throw new Exception("No file selected!");
             }
+        }
+
+        private void linkLabelInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            DocumentationHelper.ShowDocsOnline();
         }
     }
 }
