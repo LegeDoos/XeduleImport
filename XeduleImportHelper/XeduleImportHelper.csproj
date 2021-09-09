@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Ical.Net" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Office365.OutlookServices" Version="1.0.41" />
   </ItemGroup>
 
 </Project>
