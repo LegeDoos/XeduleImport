@@ -1,2 +1,2 @@
 # XeduleImport
-Hulpmiddel om het rooster van Xedule te importeren in je Outlook agenda
+Voor meer info: https://legedoos.github.io/XeduleImport/
