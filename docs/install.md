@@ -3,7 +3,7 @@ Om de applicatie te installeren moeten een paar stappen doorlopen worden. Tijden
 
 ## Stap 1 - start de installer
 
-Ga naar [de installer](https://legedoos.github.io/XeduleImport/Installer/Publish.html) en klik install
+Ga naar <a href="https://legedoos.github.io/XeduleImport/Installer/Publish.html" target="_blank">de installer (nieuw scherm)</a> en klik install
 
 ![Download installer](install01.png)
 
