@@ -14,4 +14,5 @@ Je kunt bijdragen aan dit project door naar de [Github pagina](https://github.co
 
 ### Contact of vragen
 
-Maak [een issue](https://github.com/LegeDoos/XeduleImport/issues) aan of neem contact op met rob at cilissen dot nl 
+Maak [een issue aan](https://github.com/LegeDoos/XeduleImport/issues) of neem contact op met rob at cilissen dot nl 
+
