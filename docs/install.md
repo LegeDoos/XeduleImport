@@ -38,4 +38,4 @@ Kies er eventueel voor om de applicatie vast te maken aan je taakbalk zodat je h
 De installer is zo gemaakt dat automatisch gecontroleerd wordt op updates en deze bij het starten van de applicatie worden gedownload en geïnstalleerd.
 
 
-![Terug naar home](https://legedoos.github.io/XeduleImport/)
+![Terug naar home](index.md)
