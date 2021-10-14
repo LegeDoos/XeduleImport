@@ -11,6 +11,7 @@ namespace XeduleImportHelper.UI
         public FormMain()
         {
             InitializeComponent();
+            labelVersion.Text = $"Version: {VersionInfoHelper.VersionNumberAssembly}";
         }
 
         private void BtnSelectICSFile_Click(object sender, EventArgs e)

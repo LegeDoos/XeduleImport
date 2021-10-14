@@ -40,6 +40,7 @@ namespace XeduleImportHelper.UI
             this.groupBoxSelectFile = new System.Windows.Forms.GroupBox();
             this.groupBoxInfo = new System.Windows.Forms.GroupBox();
             this.linkLabelInfo = new System.Windows.Forms.LinkLabel();
+            this.labelVersion = new System.Windows.Forms.Label();
             this.groupBoxProcess.SuspendLayout();
             this.groupBoxSelectFile.SuspendLayout();
             this.groupBoxInfo.SuspendLayout();
@@ -119,19 +120,20 @@ namespace XeduleImportHelper.UI
             // 
             this.groupBoxSelectFile.Controls.Add(this.btnSelectICSFile);
             this.groupBoxSelectFile.Controls.Add(this.lblFilename);
-            this.groupBoxSelectFile.Location = new System.Drawing.Point(12, 94);
+            this.groupBoxSelectFile.Location = new System.Drawing.Point(12, 114);
             this.groupBoxSelectFile.Name = "groupBoxSelectFile";
-            this.groupBoxSelectFile.Size = new System.Drawing.Size(328, 110);
+            this.groupBoxSelectFile.Size = new System.Drawing.Size(328, 90);
             this.groupBoxSelectFile.TabIndex = 6;
             this.groupBoxSelectFile.TabStop = false;
             this.groupBoxSelectFile.Text = "Select file";
             // 
             // groupBoxInfo
             // 
+            this.groupBoxInfo.Controls.Add(this.labelVersion);
             this.groupBoxInfo.Controls.Add(this.linkLabelInfo);
             this.groupBoxInfo.Location = new System.Drawing.Point(13, 27);
             this.groupBoxInfo.Name = "groupBoxInfo";
-            this.groupBoxInfo.Size = new System.Drawing.Size(327, 61);
+            this.groupBoxInfo.Size = new System.Drawing.Size(327, 81);
             this.groupBoxInfo.TabIndex = 7;
             this.groupBoxInfo.TabStop = false;
             this.groupBoxInfo.Text = "Info";
@@ -146,6 +148,15 @@ namespace XeduleImportHelper.UI
             this.linkLabelInfo.TabStop = true;
             this.linkLabelInfo.Text = "Online documentatie";
             this.linkLabelInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelInfo_LinkClicked);
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Location = new System.Drawing.Point(10, 42);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(51, 15);
+            this.labelVersion.TabIndex = 1;
+            this.labelVersion.Text = "Version: ";
             // 
             // FormMain
             // 
@@ -180,5 +191,6 @@ namespace XeduleImportHelper.UI
         private System.Windows.Forms.GroupBox groupBoxSelectFile;
         private System.Windows.Forms.GroupBox groupBoxInfo;
         private System.Windows.Forms.LinkLabel linkLabelInfo;
+        private System.Windows.Forms.Label labelVersion;
     }
 }
