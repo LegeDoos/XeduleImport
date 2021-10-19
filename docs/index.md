@@ -7,6 +7,10 @@ Lees hier de [installatiehandleiding](install.md)
 ## Gebruik
 
 Lees hier de [korte handleiding](manual.md)
+
+## Releasenotes
+
+Bekijk hier de [release notes per versie](https://github.com/LegeDoos/XeduleImport/issues?q=label%3Areleasenote+)
   
 ## Bijdragen
 
