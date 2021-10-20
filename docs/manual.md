@@ -11,9 +11,11 @@
 
 1. Ga naar Xedule voor je organisatie en log in. Voor Zuyd Hogeschool is dit https://sa-zuyd.xedule.nl/
 
-2. Open je persoonlijk rooster en klik rechtsboven op de periode die je wilt downloaden. Handig is hier te kiezen voor "Tijdlijn periode", zodat het rooster van de gehele blokperiode wordt getoond en zometeen dus ook wordt gedownload. (plaatje 01)
+2. Open je persoonlijk rooster en klik rechtsboven op de periode die je wilt downloaden. Handig is hier te kiezen voor "Tijdlijn periode", zodat het rooster van de gehele blokperiode wordt getoond en zometeen dus ook wordt gedownload. 
+![Kies tijdlijn periode](manualxedule01.png)
 
-3. Klik op de knop ICS om het bestand te downloaden. Het bestand wordt geplaatst in de standaard downloadfolder van je browser (plaatje 01)
+3. Klik op de knop ICS om het bestand te downloaden. Het bestand wordt geplaatst in de standaard downloadfolder van je browser 
+![Kies ICS](manualxedule02.png)
 
 Je bent nu klaar in Xedule
 
@@ -21,8 +23,8 @@ Je bent nu klaar in Xedule
 
 ## Gebruik Xedule Importhelper
 
-(plaatje 01)
-1. Start "Importhelper for Xedule" op je taakbalk (als je die hebt gepind tijdens de installatie) of zoek in je Windows startmenu op "XeduleImportHelper"
+1. Start "Importhelper for Xedule" op je taakbalk (als je die hebt gepind tijdens de installatie) of zoek in je Windows startmenu op "XeduleImportHelper" 
+![Kies ICS](manualimporthelper01.png)
 
 2. Klik op de "Select ICS file" knop (1) om het gedownloade .ics bestand te selecteren
 
@@ -40,10 +42,13 @@ Onderstaand staan de stappen om je rooster toe te voegen middels de Outlook desk
 
 1. Start de Outlook desktop applicatie en ga naar je agenda.
 2. Zorg dat alleen de agenda zichtbaar is waarin je wilt importeren
-3. Ga naar menu File > Open & Export > Import/Export (plaatje 01)
-4. Kies voor "Import an iCalendar (.ics) or vCalendar file (.vcs) (plaatje 02)
+3. Ga naar menu File > Open & Export > Import/Export 
+![Import/Export](manualoutlook01.png)
+4. Kies voor "Import an iCalendar (.ics) or vCalendar file (.vcs) 
+![Kies ics](manualoutlook02.png)
 5. Selecteer het aangepaste .ics bestand
-6. Kies in het volgende scherm voor "import" (plaatje 03)
+6. Kies in het volgende scherm voor "import" 
+![Import](manualoutlook03.png)
 
 Het bestand wordt succesvol geïmporteerd en is zichtbaar in je agenda.
 
@@ -56,9 +61,6 @@ Het bestand wordt succesvol geïmporteerd en is zichtbaar in je agenda.
 3. Selecteer in de lijstweergave alle items die aan je voorwaarden voldoen en klik delete.
 
 Alle events worden nu verwijderd. 
-
-
-Hier komt verwijderen uit Outlook
 
 [Naar boven](#gebruikershandleiding)
 
