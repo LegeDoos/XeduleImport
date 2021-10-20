@@ -4,12 +4,24 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
 	<UseWindowsForms>true</UseWindowsForms>
-	<AssemblyVersion>0.0.0.2</AssemblyVersion>
-	<FileVersion>0.0.0.2</FileVersion>
+	<AssemblyVersion>0.0.0.3</AssemblyVersion>
+	<FileVersion>0.0.0.3</FileVersion>
+	<ApplicationIcon>zuyd.ico</ApplicationIcon>
+	<PackageProjectUrl>https://legedoos.github.io/XeduleImport/</PackageProjectUrl>
+	<Authors>LegeDoos</Authors>
+	<PackageIcon>zuyd.jpg</PackageIcon>
+	<PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Ical.Net" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="UI\zuyd.jpg">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
