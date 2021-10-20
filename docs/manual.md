@@ -1,5 +1,6 @@
 # Gebruikershandleiding
 
+Om je rooster in Outlook te krijgen moeten er een aantal stappen worden uitgevoerd. Je moet een bestand downloaden uit Xedule. Dit bestand moet aangepast worden en vervolgens in Outlook worden geüpload. Deze stappen staan in onderstaande handleiding nader toegelicht. 
 
 - [Download ICS bestand uit Xedule](#download-ics-bestand-uit-xedule)
 - [Gebruik Xedule Importhelper](#gebruik-xedule-importhelper)
@@ -23,8 +24,9 @@ Je bent nu klaar in Xedule
 
 ## Gebruik Xedule Importhelper
 
-1. Start "Importhelper for Xedule" op je taakbalk (als je die hebt gepind tijdens de installatie) of zoek in je Windows startmenu op "XeduleImportHelper" 
-![Kies ICS](manualimporthelper01.png)
+1. Start "Importhelper for Xedule" op je taakbalk (als je die hebt gepind tijdens de installatie) of zoek in je Windows startmenu op "XeduleImportHelper"
+
+   ![Kies ICS](manualimporthelper01.png)
 
 2. Klik op de "Select ICS file" knop (1) om het gedownloade .ics bestand te selecteren
 
@@ -43,12 +45,15 @@ Onderstaand staan de stappen om je rooster toe te voegen middels de Outlook desk
 1. Start de Outlook desktop applicatie en ga naar je agenda.
 2. Zorg dat alleen de agenda zichtbaar is waarin je wilt importeren
 3. Ga naar menu File > Open & Export > Import/Export 
-![Import/Export](manualoutlook01.png)
+   
+   ![Import/Export](manualoutlook01.png)
 4. Kies voor "Import an iCalendar (.ics) or vCalendar file (.vcs) 
-![Kies ics](manualoutlook02.png)
+   
+   ![Kies ics](manualoutlook02.png)
 5. Selecteer het aangepaste .ics bestand
 6. Kies in het volgende scherm voor "import" 
-![Import](manualoutlook03.png)
+   
+   ![Import](manualoutlook03.png)
 
 Het bestand wordt succesvol geïmporteerd en is zichtbaar in je agenda.
 
