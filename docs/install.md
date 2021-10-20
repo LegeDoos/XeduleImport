@@ -27,11 +27,6 @@ Na installatie zal de app openen op het startscherm
 
 ![Install 4](install04.png)
 
-# Stap 5 - Vastmaken aan taakbalk
-
-Kies er eventueel voor om de applicatie vast te maken aan je taakbalk zodat je hem de volgende keer makkelijk kunt vinden:
-
-![Install 5](install05.png)
 
 # Installatie van updates
 
