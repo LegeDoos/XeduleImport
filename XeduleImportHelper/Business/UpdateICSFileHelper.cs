@@ -20,6 +20,10 @@ namespace XeduleImportHelper
         /// </summary>
         public bool AddXeduleCategory { get; set; } = true;
         /// <summary>
+        /// The category id to set
+        /// </summary>
+        public string CustomCategory { get; set; } = "Xedule";
+        /// <summary>
         /// Remove all attendees in the file if true
         /// </summary>
         public bool RemoveAllAttendees { get; set; } = true;
@@ -84,7 +88,7 @@ namespace XeduleImportHelper
                     }
                     if (AddXeduleCategory)
                     {
-                        e.Categories.Add("Xedule");
+                        e.Categories.Add(this.CustomCategory);
                     }
                 }
             }

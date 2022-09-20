@@ -39,6 +39,7 @@ namespace XeduleImportHelper.UI
             if (IcsHelper != null)
             {
                 IcsHelper.AddXeduleCategory = cbAddCategory.Checked;
+                IcsHelper.CustomCategory = tbCategory.Text;
                 IcsHelper.RemoveAllAttendees = cbRemoveAttendees.Checked;
                 IcsHelper.HandleFile();
                 MessageBox.Show($"Result saved: {IcsHelper.ResultFilename}");
