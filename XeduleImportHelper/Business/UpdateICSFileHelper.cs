@@ -57,6 +57,13 @@ namespace XeduleImportHelper
             ResultPath = Path.GetDirectoryName(SourceICSFile);
     }
 
+
+        /// <summary>
+        /// Constructor to construct the helper class based on the ics file content
+        /// </summary>
+        /// <param name="icsFileContent">The ICS file content</param>
+        /// <param name="personName">The name of the person</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public UpdateICSFileHelper(string icsFileContent, string personName)
         {
             if (string.IsNullOrEmpty(icsFileContent))
