@@ -13,9 +13,9 @@ namespace XeduleImportHelper.Business
 {
     public class XeduleAPIHelper
     {
-        string fromDate = string.Empty;
-        string toDate = string.Empty;
-        int personId;
+        readonly string fromDate = string.Empty;
+        readonly string toDate = string.Empty;
+        readonly int personId;
 
         public string BearerToken  { private get; set; }
 

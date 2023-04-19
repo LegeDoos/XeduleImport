@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace XeduleImportHelper.Business
@@ -14,6 +15,7 @@ namespace XeduleImportHelper.Business
         /// <summary>
         /// The token
         /// </summary>
+        [JsonIgnore]
         public string BearerToken { get; set; }
 
         /// <summary>
@@ -24,11 +26,15 @@ namespace XeduleImportHelper.Business
         /// <summary>
         /// Persons to get information for
         /// </summary>
+        [JsonIgnore]
         public List<Person> Persons { get; set; }
 
         public string WorkingFolder { get; set; }
         
-        const string filename = "_setting.json";
+        const string fileNameSettings = "_setting.json";
+        const string fileNamePeeps = "_peeps.txt"; 
+        const string fileNameToken = "_token.txt";
+
 
         public Settings()
         {    
@@ -43,13 +49,42 @@ namespace XeduleImportHelper.Business
 
         public static Settings ReadSettings(string _workingFolder)
         { 
-            string fname = Path.Combine(_workingFolder, filename);
-            if (!string.IsNullOrEmpty(_workingFolder) && File.Exists(fname))
+            string fullPathSettings = Path.Combine(_workingFolder, fileNameSettings);
+            string fullPathPeeps = Path.Combine(_workingFolder, fileNamePeeps);
+            string fullPathToken = Path.Combine(_workingFolder, fileNameToken);
+            if (!string.IsNullOrEmpty(_workingFolder) && File.Exists(fullPathSettings))
             {
-                string content = File.ReadAllText(fname);
-                var retval = JsonSerializer.Deserialize<Settings>(content);
-                retval.WorkingFolder = _workingFolder;
-                return retval;
+                string content = File.ReadAllText(fullPathSettings);
+                var theSettings = JsonSerializer.Deserialize<Settings>(content);
+                theSettings.WorkingFolder = _workingFolder;
+
+                // get peeps
+                theSettings.Persons = new List<Person>();
+                if (File.Exists(fullPathPeeps))
+                {
+                    foreach (var line in File.ReadAllLines(fullPathPeeps))
+                    {
+                        try
+                        {
+                            var peep = line.Split(";");
+                            if (peep.Length == 2)
+                            {
+                                theSettings.Persons.Add(new Person() { XeduleId = Int32.Parse(peep[0]), Name = peep[1] });
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Invalid peeps file or error in peeps file!");
+                        }
+                    }
+                }
+
+                // get token
+                if (File.Exists(fullPathToken))
+                {
+                    theSettings.BearerToken = File.ReadAllText(fullPathToken);
+                }
+                return theSettings;
             }
             else
             {
@@ -59,8 +94,28 @@ namespace XeduleImportHelper.Business
 
         public void StoreSettings()
         {
-            string fname = Path.Combine(WorkingFolder, filename);
-            File.WriteAllText(fname, JsonSerializer.Serialize(this));
+            string fullPathSettings = Path.Combine(WorkingFolder, fileNameSettings);
+            string fullPathPeeps = Path.Combine(WorkingFolder, fileNamePeeps);
+            string fullPathToken = Path.Combine(WorkingFolder, fileNameToken);
+
+            // write settings
+            File.WriteAllText(fullPathSettings, JsonSerializer.Serialize(this));
+
+            // write peeps
+            // Create or replace a file to write to.
+            using (StreamWriter sw = File.CreateText(fullPathPeeps))
+            {
+                foreach (var peep in Persons)
+                {
+                    sw.WriteLine($"{peep.XeduleId};{peep.Name.ToLower()}");
+                }
+            }
+        
+            // write token
+            using (StreamWriter sw = File.CreateText(fullPathToken))
+            {
+                sw.WriteLine(BearerToken);
+            }
         }
     }
 }
