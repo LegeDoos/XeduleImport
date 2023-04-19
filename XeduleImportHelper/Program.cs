@@ -15,10 +15,18 @@ namespace XeduleImportHelper
     {
         static void Main()
         {
+
+
             Settings s = Settings.ReadSettings(@"D:\_XeduleHelper\");
 
+
+            // create teacherlist from api result
+            //https://zuyd.myx.nl/api/Attendee/Type/Teacher
+            //var tlist = JsonSerializer.Deserialize<Teachers>(File.ReadAllText(@"D:\_XeduleHelper\teachers.json"));
+            //s.Persons = tlist.Result.Where(t => t.Teams != null && t.Teams.Contains(19821)).Select(i => new Person() { XeduleId = i.Id, Name = i.Code.ToLower() } ).OrderBy(p => p.Name).ToList();
+
             DateTime from = new DateTime(2023, 4, 24);
-            string resultPath = Path.Combine(s.DestinationFolder, from.ToString("yyyyMMdd"));
+            string resultPath = Path.Combine(s.DestinationFolder, "2022BP4");
             if (!Directory.Exists(resultPath))
             {
                 Directory.CreateDirectory(resultPath);
