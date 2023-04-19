@@ -31,7 +31,7 @@ namespace XeduleImportHelper
                 }
             }
 
-            foreach (var person in s.Persons)
+            foreach (var person in s.Persons.OrderBy(p => p.Name))
             {
                 var icsResult = new XeduleAPIHelper(from, new DateTime(2023, 8, 1), person.XeduleId) { BearerToken = s.BearerToken }.CallAPI();
                 UpdateICSFileHelper helper = new UpdateICSFileHelper(icsResult, person.Name) { ResultPath = resultPath };
