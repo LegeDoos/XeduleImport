@@ -23,6 +23,11 @@ namespace XeduleImportHelper.Business
         /// </summary>
         public string DestinationFolder { get; set; }
 
+        public string DestinationSubFolder { get; set; }
+
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
         /// <summary>
         /// Persons to get information for
         /// </summary>
@@ -74,7 +79,7 @@ namespace XeduleImportHelper.Business
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("Invalid peeps file or error in peeps file!");
+                            throw new Exception($"Invalid peeps file or error in peeps file! Error: {ex.Message}");
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using XeduleImportHelper.Business;
 
@@ -6,53 +7,79 @@ namespace XeduleImportHelper.UI
 {
     public partial class FormMain : Form
     {
-        public UpdateICSFileHelper IcsHelper { get; set; }
+        private Settings s;
 
         public FormMain()
         {
             InitializeComponent();
-            labelVersion.Text = $"Version: {VersionInfoHelper.VersionNumberAssembly}";
+            LoadSettings();
         }
 
-        private void BtnSelectICSFile_Click(object sender, EventArgs e)
+        private void LoadSettings()
         {
-            using OpenFileDialog openFileDialog = new();
-            openFileDialog.Filter = "ics files (*.ics)|*.ics";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            s = Settings.ReadSettings(@"D:\_XeduleHelper\");
+            tbToken.Text = s.BearerToken;
+            tbDestinationFolder.Text = s.DestinationFolder;
+            tbWorkingFolder.Text = s.WorkingFolder;
+            tbFolderName.Text = s.DestinationSubFolder;
+            try
             {
-                // Select the file
-                // Get the path of specified file
-                string filePath = openFileDialog.FileName;
-                lblFilename.Text = $"Selected file: {filePath}";
-                IcsHelper = new UpdateICSFileHelper(filePath);
-
-                // Enable process group
-                groupBoxProcess.Enabled = true;
+                dateTimePickerFrom.Value = s.FromDate;
+                dateTimePickerTo.Value = s.ToDate;
             }
-
-        }
-
-        private void BtnProcessFile_Click(object sender, EventArgs e)
-        {
-            // process the file
-            if (IcsHelper != null)
+            catch (Exception)
             {
-                IcsHelper.AddXeduleCategory = cbAddCategory.Checked;
-                IcsHelper.CustomCategory = tbCategory.Text;
-                IcsHelper.RemoveAllAttendees = cbRemoveAttendees.Checked;
-                IcsHelper.HandleFile();
-                MessageBox.Show($"Result saved: {IcsHelper.ResultFilename}");
-            }
-            else
-            {
-                throw new Exception("No file selected!");
             }
         }
 
-        private void linkLabelInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void SaveSettings()
         {
-            DocumentationHelper.ShowDocsOnline();
+            s.BearerToken = tbToken.Text;
+            s.DestinationFolder = tbDestinationFolder.Text;
+            s.WorkingFolder = tbWorkingFolder.Text;
+            s.FromDate = dateTimePickerFrom.Value.Date;
+            s.ToDate = dateTimePickerTo.Value.Date;
+            s.DestinationSubFolder = tbFolderName.Text;
+            s.StoreSettings();
+        }
+
+        private void tbWorkingFolder_Click(object sender, EventArgs e)
+        {
+            if (sender is TextBox)
+            {
+                var s = sender as TextBox;
+                s.Text = GetFolder(s.Text);
+            }
+        }
+
+        private string GetFolder(string text)
+        {
+            folderBrowserDialog.InitialDirectory = text;
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                return folderBrowserDialog.SelectedPath;
+            }
+            return text;
+        }
+
+        private void tbDestinationFolder_Click(object sender, EventArgs e)
+        {
+            if (sender is TextBox)
+            {
+                var s = sender as TextBox;
+                s.Text = GetFolder(s.Text);
+            }
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveSettings();
+        }
+
+        private void btnProcessFile_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
