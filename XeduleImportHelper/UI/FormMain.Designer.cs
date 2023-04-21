@@ -58,7 +58,7 @@ namespace XeduleImportHelper.UI
             btnProcessFile.Location = new System.Drawing.Point(196, 187);
             btnProcessFile.Name = "btnProcessFile";
             btnProcessFile.Size = new System.Drawing.Size(120, 23);
-            btnProcessFile.TabIndex = 1;
+            btnProcessFile.TabIndex = 6;
             btnProcessFile.Text = "Process and save";
             btnProcessFile.UseVisualStyleBackColor = true;
             btnProcessFile.Click += btnProcessFile_Click;
@@ -88,15 +88,17 @@ namespace XeduleImportHelper.UI
             tbToken.Location = new System.Drawing.Point(116, 158);
             tbToken.Name = "tbToken";
             tbToken.Size = new System.Drawing.Size(200, 23);
-            tbToken.TabIndex = 6;
+            tbToken.TabIndex = 5;
+            tbToken.Leave += tbToken_Leave;
             // 
             // tbDestinationFolder
             // 
             tbDestinationFolder.Location = new System.Drawing.Point(116, 129);
             tbDestinationFolder.Name = "tbDestinationFolder";
             tbDestinationFolder.Size = new System.Drawing.Size(200, 23);
-            tbDestinationFolder.TabIndex = 6;
+            tbDestinationFolder.TabIndex = 4;
             tbDestinationFolder.Click += tbDestinationFolder_Click;
+            tbDestinationFolder.Leave += tbDestinationFolder_Leave;
             // 
             // tbWorkingFolder
             // 
@@ -104,7 +106,8 @@ namespace XeduleImportHelper.UI
             tbWorkingFolder.Location = new System.Drawing.Point(116, 101);
             tbWorkingFolder.Name = "tbWorkingFolder";
             tbWorkingFolder.Size = new System.Drawing.Size(200, 23);
-            tbWorkingFolder.TabIndex = 6;
+            tbWorkingFolder.TabIndex = 3;
+            tbWorkingFolder.Leave += tbWorkingFolder_Leave;
             // 
             // label2
             // 
@@ -120,8 +123,9 @@ namespace XeduleImportHelper.UI
             tbFolderName.Location = new System.Drawing.Point(116, 72);
             tbFolderName.Name = "tbFolderName";
             tbFolderName.Size = new System.Drawing.Size(200, 23);
-            tbFolderName.TabIndex = 5;
+            tbFolderName.TabIndex = 2;
             tbFolderName.Text = "2020BP1";
+            tbFolderName.Leave += tbFolderName_Leave;
             // 
             // labelToken
             // 
@@ -164,7 +168,8 @@ namespace XeduleImportHelper.UI
             dateTimePickerTo.Location = new System.Drawing.Point(116, 44);
             dateTimePickerTo.Name = "dateTimePickerTo";
             dateTimePickerTo.Size = new System.Drawing.Size(200, 23);
-            dateTimePickerTo.TabIndex = 2;
+            dateTimePickerTo.TabIndex = 1;
+            dateTimePickerTo.ValueChanged += dateTimePickerTo_ValueChanged;
             // 
             // labelFromDate
             // 
@@ -181,6 +186,7 @@ namespace XeduleImportHelper.UI
             dateTimePickerFrom.Name = "dateTimePickerFrom";
             dateTimePickerFrom.Size = new System.Drawing.Size(200, 23);
             dateTimePickerFrom.TabIndex = 0;
+            dateTimePickerFrom.ValueChanged += dateTimePickerFrom_ValueChanged;
             // 
             // folderBrowserDialog
             // 
