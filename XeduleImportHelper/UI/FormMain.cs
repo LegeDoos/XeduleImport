@@ -86,6 +86,12 @@ namespace XeduleImportHelper.UI
 
         private void btnProcessFile_Click(object sender, EventArgs e)
         {
+            progressBar.Visible = true;
+            progressBar.Minimum = 0;
+            progressBar.Maximum = s.Persons.Count;
+            progressBar.Value = 0;
+            progressBar.Step = 1;
+
             string resultPath = Path.Combine(s.DestinationFolder, s.DestinationSubFolder);
             if (!Directory.Exists(resultPath))
             {
@@ -99,20 +105,33 @@ namespace XeduleImportHelper.UI
                 }
             }
 
+            bool stop = false;
+            int i = 0;
             foreach (var person in s.Persons.OrderBy(p => p.Name))
             {
-                var icsResult = new XeduleAPIHelper(s.FromDate, s.ToDate, person.XeduleId) { BearerToken = s.BearerToken }.CallAPI();
-                UpdateICSFileHelper helper = new(icsResult, person.Name)
+                progressBar.PerformStep();
+                if (!stop)
                 {
-                    ResultPath = resultPath,
-                    RemoveAllAttendees = true,
-                    AddXeduleCategory = true
-                };
-                var res = helper.HandleFile();
-                Console.WriteLine(res);
-                Console.ReadLine();
+                    try
+                    {
+                        var icsResult = new XeduleAPIHelper(s.FromDate, s.ToDate, person.XeduleId) { BearerToken = s.BearerToken }.CallAPI();
+                        UpdateICSFileHelper helper = new(icsResult, person.Name)
+                        {
+                            ResultPath = resultPath,
+                            RemoveAllAttendees = true,
+                            AddXeduleCategory = true
+                        };
+                        var res = helper.HandleFile();
+                        i++;
+                    }
+                    catch (Exception ex)
+                    {
+                        stop = true;
+                        MessageBox.Show($"Something went wrong. Error: {ex.Message}");
+                    }
+                }
             }
-
+            MessageBox.Show($"{i} persons processed!");
         }
 
         private void dateTimePickerFrom_ValueChanged(object sender, EventArgs e)

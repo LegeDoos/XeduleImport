@@ -46,6 +46,7 @@ namespace XeduleImportHelper.UI
             labelFromDate = new System.Windows.Forms.Label();
             dateTimePickerFrom = new System.Windows.Forms.DateTimePicker();
             folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            progressBar = new System.Windows.Forms.ProgressBar();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -192,11 +193,19 @@ namespace XeduleImportHelper.UI
             // 
             folderBrowserDialog.Description = "Select folder";
             // 
+            // progressBar
+            // 
+            progressBar.Location = new System.Drawing.Point(12, 241);
+            progressBar.Name = "progressBar";
+            progressBar.Size = new System.Drawing.Size(360, 23);
+            progressBar.TabIndex = 8;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(475, 461);
+            ClientSize = new System.Drawing.Size(379, 271);
+            Controls.Add(progressBar);
             Controls.Add(panel1);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "FormMain";
@@ -225,5 +234,6 @@ namespace XeduleImportHelper.UI
         private System.Windows.Forms.TextBox tbToken;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
