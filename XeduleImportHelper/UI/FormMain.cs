@@ -191,5 +191,10 @@ namespace XeduleImportHelper.UI
                 }
             }
         }
+
+        private void tbToken_Click(object sender, EventArgs e)
+        {
+            tbToken.SelectAll();
+        }
     }
 }

@@ -90,6 +90,7 @@ namespace XeduleImportHelper.UI
             tbToken.Name = "tbToken";
             tbToken.Size = new System.Drawing.Size(200, 23);
             tbToken.TabIndex = 5;
+            tbToken.Click += tbToken_Click;
             tbToken.Leave += tbToken_Leave;
             // 
             // tbDestinationFolder
