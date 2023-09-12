@@ -9,7 +9,7 @@ namespace XeduleImportHelper.UI
     public partial class FormMain : Form
     {
         bool formLoading;
-        private Settings s;
+        private Settings settings;
 
         public FormMain()
         {
@@ -21,15 +21,15 @@ namespace XeduleImportHelper.UI
 
         private void LoadSettings()
         {
-            s = Settings.ReadSettings(@"D:\_XeduleHelper\");
-            tbToken.Text = s.BearerToken;
-            tbDestinationFolder.Text = s.DestinationFolder;
-            tbWorkingFolder.Text = s.WorkingFolder;
-            tbFolderName.Text = s.DestinationSubFolder;
+            settings = Settings.ReadSettings(@"D:\_XeduleHelper\");
+            tbToken.Text = settings.BearerToken;
+            tbDestinationFolder.Text = settings.DestinationFolder;
+            tbWorkingFolder.Text = settings.WorkingFolder;
+            tbFolderName.Text = settings.DestinationSubFolder;
             try
             {
-                dateTimePickerFrom.Value = s.FromDate;
-                dateTimePickerTo.Value = s.ToDate;
+                dateTimePickerFrom.Value = settings.FromDate;
+                dateTimePickerTo.Value = settings.ToDate;
             }
             catch (Exception)
             {
@@ -40,13 +40,13 @@ namespace XeduleImportHelper.UI
         {
             if (!formLoading)
             {
-                s.BearerToken = tbToken.Text;
-                s.DestinationFolder = tbDestinationFolder.Text;
-                s.WorkingFolder = tbWorkingFolder.Text;
-                s.FromDate = dateTimePickerFrom.Value.Date;
-                s.ToDate = dateTimePickerTo.Value.Date;
-                s.DestinationSubFolder = tbFolderName.Text;
-                s.StoreSettings();
+                settings.BearerToken = tbToken.Text;
+                settings.DestinationFolder = tbDestinationFolder.Text;
+                settings.WorkingFolder = tbWorkingFolder.Text;
+                settings.FromDate = dateTimePickerFrom.Value.Date;
+                settings.ToDate = dateTimePickerTo.Value.Date;
+                settings.DestinationSubFolder = tbFolderName.Text;
+                settings.StoreSettings();
             }
         }
 
@@ -88,11 +88,11 @@ namespace XeduleImportHelper.UI
         {
             progressBar.Visible = true;
             progressBar.Minimum = 0;
-            progressBar.Maximum = s.Persons.Count;
+            progressBar.Maximum = settings.Persons.Count;
             progressBar.Value = 0;
             progressBar.Step = 1;
 
-            string resultPath = Path.Combine(s.DestinationFolder, s.DestinationSubFolder);
+            string resultPath = Path.Combine(settings.DestinationFolder, settings.DestinationSubFolder);
             if (!Directory.Exists(resultPath))
             {
                 Directory.CreateDirectory(resultPath);
@@ -107,14 +107,14 @@ namespace XeduleImportHelper.UI
 
             bool stop = false;
             int i = 0;
-            foreach (var person in s.Persons.OrderBy(p => p.Name))
+            foreach (var person in settings.Persons.OrderBy(p => p.Name))
             {
                 progressBar.PerformStep();
                 if (!stop)
                 {
                     try
                     {
-                        var icsResult = new XeduleAPIHelper(s.FromDate, s.ToDate, person.XeduleId) { BearerToken = s.BearerToken }.CallAPI();
+                        var icsResult = new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPI();
                         UpdateICSFileHelper helper = new(icsResult, person.Name)
                         {
                             ResultPath = resultPath,
