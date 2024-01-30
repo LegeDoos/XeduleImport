@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 using XeduleImportHelper.Business;
 
@@ -88,7 +90,6 @@ namespace XeduleImportHelper.UI
         {
             progressBar.Visible = true;
             progressBar.Minimum = 0;
-            progressBar.Maximum = settings.Persons.Count;
             progressBar.Value = 0;
             progressBar.Step = 1;
 
@@ -105,6 +106,18 @@ namespace XeduleImportHelper.UI
                 }
             }
 
+            // get peeps
+            var peepsResult = new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForPeeps();
+            Teachers teachers = JsonSerializer.Deserialize<Teachers>(peepsResult);
+            if (teachers.Result.Count > 0)
+            {
+                // wij zijn team 19821
+                settings.Persons = teachers.Result
+                    .Where(t => t.Teams.Contains(19821)).Select(p => new Person { XeduleId = p.Id, Name = p.Code }).ToList();
+            }
+
+            // get schedule
+            progressBar.Maximum = settings.Persons.Count;
             bool stop = false;
             int i = 0;
             foreach (var person in settings.Persons.OrderBy(p => p.Name))
@@ -114,7 +127,7 @@ namespace XeduleImportHelper.UI
                 {
                     try
                     {
-                        var icsResult = new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPI();
+                        var icsResult = new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPIForSchedule();
                         UpdateICSFileHelper helper = new(icsResult, person.Name)
                         {
                             ResultPath = resultPath,

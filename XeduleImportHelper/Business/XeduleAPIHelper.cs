@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
@@ -19,17 +20,23 @@ namespace XeduleImportHelper.Business
 
         public string BearerToken  { private get; set; }
 
-        public XeduleAPIHelper(int personId)
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        public XeduleAPIHelper()
+        {
+            int fromYear = DateTime.Now.Month < 8 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+            fromDate = $"{fromYear}-08-01";
+            toDate = $"{fromYear + 1}-08-01";
+        }
+
+        public XeduleAPIHelper(int personId) : this()
         {
             if (personId == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(personId));
             }
             this.personId = personId;
-
-            int fromYear = DateTime.Now.Month < 8 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
-            fromDate = $"{fromYear}-08-01";
-            toDate = $"{fromYear+1}-08-01";
         }
 
         public XeduleAPIHelper(DateTime fromDate, DateTime toDate, int personId) : this(personId)
@@ -38,11 +45,21 @@ namespace XeduleImportHelper.Business
             this.toDate = toDate.ToString("yyyy-MM-dd");
         }
 
-        public string CallAPI()
+        public string CallAPIForSchedule()
         {
             string url = $"https://zuyd.myx.nl/api/InternetCalendar?start={fromDate}&end={toDate}&atnId={personId}";
-          
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+            return CallApi(url);          
+        }
+
+        public string CallApiForPeeps()
+        {
+          //  return string.Empty;
+            return CallApi($"https://zuyd.myx.nl/api/Attendee/Type/Teacher");
+        }
+
+        private string CallApi(string _url)
+        {
+            var httpRequest = (HttpWebRequest)WebRequest.Create(_url);
             httpRequest.Accept = "application/json";
             httpRequest.Headers["Authorization"] = $"Bearer {BearerToken}";
 
@@ -60,6 +77,5 @@ namespace XeduleImportHelper.Business
 
             return $"{httpResponse.StatusCode}";
         }
-
     }
 }
