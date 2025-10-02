@@ -23,7 +23,7 @@ namespace XeduleImportHelper.UI
 
         private void LoadSettings()
         {
-            settings = Settings.ReadSettings(@"D:\_XeduleHelper\");
+            settings = Settings.ReadSettings(@"C:\RCData\_XeduleHelper");
             tbToken.Text = settings.BearerToken;
             tbDestinationFolder.Text = settings.DestinationFolder;
             tbWorkingFolder.Text = settings.WorkingFolder;
