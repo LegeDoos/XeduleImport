@@ -44,7 +44,7 @@ namespace XeduleImportHelper
 
 
         /// <summary>
-        /// Contsructor to construct the helper class based on a given file
+        /// Constructor to construct the helper class based on a given file
         /// </summary>
         /// <param name="_sourceFile">The sourcefile to edit</param>
         public UpdateICSFileHelper(string _sourceFile)
