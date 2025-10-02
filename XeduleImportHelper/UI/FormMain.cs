@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using XeduleImportHelper.Business;
 
@@ -42,7 +43,7 @@ namespace XeduleImportHelper.UI
         {
             if (!formLoading)
             {
-                settings.BearerToken = tbToken.Text;
+                settings.BearerToken = tbToken.Text?.Trim();
                 settings.DestinationFolder = tbDestinationFolder.Text;
                 settings.WorkingFolder = tbWorkingFolder.Text;
                 settings.FromDate = dateTimePickerFrom.Value.Date;
@@ -86,7 +87,7 @@ namespace XeduleImportHelper.UI
             SaveSettings();
         }
 
-        private void btnProcessFile_Click(object sender, EventArgs e)
+        private async void btnProcessFile_Click(object sender, EventArgs e)
         {
             progressBar.Visible = true;
             progressBar.Minimum = 0;
@@ -106,45 +107,56 @@ namespace XeduleImportHelper.UI
                 }
             }
 
-            // get peeps
-            var peepsResult = new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForPeeps();
-            Teachers teachers = JsonSerializer.Deserialize<Teachers>(peepsResult);
-            if (teachers.Result.Count > 0)
+            try
             {
-                // wij zijn team 19821
-                settings.Persons = teachers.Result
-                    .Where(t => t.Teams.Contains(19821)).Select(p => new Person { XeduleId = p.Id, Name = p.Code }).ToList();
-            }
-
-            // get schedule
-            progressBar.Maximum = settings.Persons.Count;
-            bool stop = false;
-            int i = 0;
-            foreach (var person in settings.Persons.OrderBy(p => p.Name))
-            {
-                progressBar.PerformStep();
-                if (!stop)
+                // get peeps
+                var peepsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForPeeps();
+                Teachers teachers = JsonSerializer.Deserialize<Teachers>(peepsResult);
+                if (teachers.Result.Count > 0)
                 {
-                    try
+                    // wij zijn team 19821
+                    settings.Persons = teachers.Result
+                        .Where(t => t.Teams.Contains(19821)).Select(p => new Person { XeduleId = p.Id, Name = p.Code }).ToList();
+                }
+
+                // get schedule
+                progressBar.Maximum = settings.Persons.Count;
+                bool stop = false;
+                int i = 0;
+                foreach (var person in settings.Persons.OrderBy(p => p.Name))
+                {
+                    progressBar.PerformStep();
+                    if (!stop)
                     {
-                        var icsResult = new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPIForSchedule();
-                        UpdateICSFileHelper helper = new(icsResult, person.Name)
+                        try
                         {
-                            ResultPath = resultPath,
-                            RemoveAllAttendees = true,
-                            AddXeduleCategory = true
-                        };
-                        var res = helper.HandleFile();
-                        i++;
-                    }
-                    catch (Exception ex)
-                    {
-                        stop = true;
-                        MessageBox.Show($"Something went wrong. Error: {ex.Message}");
+                            var icsResult = await new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPIForSchedule();
+                            UpdateICSFileHelper helper = new(icsResult, person.Name)
+                            {
+                                ResultPath = resultPath,
+                                RemoveAllAttendees = true,
+                                AddXeduleCategory = true
+                            };
+                            var res = helper.HandleFile();
+                            i++;
+                        }
+                        catch (Exception ex)
+                        {
+                            stop = true;
+                            MessageBox.Show($"Something went wrong. Error: {ex.Message}");
+                        }
                     }
                 }
+                MessageBox.Show($"{i} persons processed!");
             }
-            MessageBox.Show($"{i} persons processed!");
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occurred: {ex.Message}");
+            }
+            finally
+            {
+                progressBar.Visible = false;
+            }
         }
 
         private void dateTimePickerFrom_ValueChanged(object sender, EventArgs e)
