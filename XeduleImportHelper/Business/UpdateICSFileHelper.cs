@@ -32,9 +32,19 @@ namespace XeduleImportHelper
         /// </summary>
         private string SourceICSFile { get; set; }
 
-        public string ResultFilename { get; private set; }
+
         /// <summary>
-        /// Contsructor to construct the helper class
+        /// Content of the ICS file
+        /// </summary>
+        private string targetFileContent;
+
+
+        public string ResultPath { get; set; } 
+        public string ResultFilename { get; private set; }
+
+
+        /// <summary>
+        /// Constructor to construct the helper class based on a given file
         /// </summary>
         /// <param name="_sourceFile">The sourcefile to edit</param>
         public UpdateICSFileHelper(string _sourceFile)
@@ -43,6 +53,30 @@ namespace XeduleImportHelper
             {
                 SourceICSFile = _sourceFile;
             }
+            ResultFilename = $"{DateTime.Now:yyyyMMddHHmmss}_result.ics";
+            ResultPath = Path.GetDirectoryName(SourceICSFile);
+    }
+
+
+        /// <summary>
+        /// Constructor to construct the helper class based on the ics file content
+        /// </summary>
+        /// <param name="icsFileContent">The ICS file content</param>
+        /// <param name="personName">The name of the person</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UpdateICSFileHelper(string icsFileContent, string personName)
+        {
+            if (string.IsNullOrEmpty(icsFileContent))
+            {
+                throw new ArgumentNullException(nameof(icsFileContent));
+            }
+            if (string.IsNullOrEmpty(personName))
+            {
+                throw new ArgumentNullException(nameof(personName));
+            }
+
+            targetFileContent = icsFileContent;
+            ResultFilename = $"{personName}_{DateTime.Now:yyyyMMddHHmmss}_result.ics";
         }
 
         /// <summary>
@@ -51,26 +85,29 @@ namespace XeduleImportHelper
         /// <returns>The path to the new file</returns>
         public string HandleFile()
         {
-            // check file            
-            string icsFileContent;
-            if (SourceICSFile == null)
+            // check file
+            if (!string.IsNullOrEmpty(SourceICSFile))
             {
-                throw new Exception("No sourcefile defined");
+                try
+                {
+                    targetFileContent = File.ReadAllText(SourceICSFile);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error reading file {SourceICSFile}", ex);
+                }
             }
-            try
+
+            if (string.IsNullOrEmpty(targetFileContent))
             {
-                icsFileContent = File.ReadAllText(SourceICSFile);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error reading file {SourceICSFile}", ex);
+                throw new Exception("No source defined");
             }
 
             // Deserialize
             Calendar calendar;
             try
             {
-                calendar = Calendar.Load(icsFileContent);
+                calendar = Calendar.Load(targetFileContent);
             }
             catch (Exception ex)
             {
@@ -97,7 +134,7 @@ namespace XeduleImportHelper
             string newFile;
             try
             {
-                newFile = $"{Path.GetDirectoryName(SourceICSFile)}\\{DateTime.Now:yyyyMMddHHmmss}_result.ics";
+                newFile = $"{ResultPath}\\{ResultFilename}";
                 var serializer = new CalendarSerializer();
                 var serializedCalendar = serializer.SerializeToString(calendar);
                 File.WriteAllText(newFile, serializedCalendar);

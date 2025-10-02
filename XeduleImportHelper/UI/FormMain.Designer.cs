@@ -30,189 +30,211 @@ namespace XeduleImportHelper.UI
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.openICSFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.btnSelectICSFile = new System.Windows.Forms.Button();
-            this.btnProcessFile = new System.Windows.Forms.Button();
-            this.cbRemoveAttendees = new System.Windows.Forms.CheckBox();
-            this.cbAddCategory = new System.Windows.Forms.CheckBox();
-            this.lblFilename = new System.Windows.Forms.Label();
-            this.groupBoxProcess = new System.Windows.Forms.GroupBox();
-            this.groupBoxSelectFile = new System.Windows.Forms.GroupBox();
-            this.groupBoxInfo = new System.Windows.Forms.GroupBox();
-            this.labelVersion = new System.Windows.Forms.Label();
-            this.linkLabelInfo = new System.Windows.Forms.LinkLabel();
-            this.tbCategory = new System.Windows.Forms.TextBox();
-            this.groupBoxProcess.SuspendLayout();
-            this.groupBoxSelectFile.SuspendLayout();
-            this.groupBoxInfo.SuspendLayout();
-            this.SuspendLayout();
+            openICSFileDialog = new System.Windows.Forms.OpenFileDialog();
+            btnProcessFile = new System.Windows.Forms.Button();
+            panel1 = new System.Windows.Forms.Panel();
+            tbToken = new System.Windows.Forms.TextBox();
+            tbDestinationFolder = new System.Windows.Forms.TextBox();
+            tbWorkingFolder = new System.Windows.Forms.TextBox();
+            label2 = new System.Windows.Forms.Label();
+            tbFolderName = new System.Windows.Forms.TextBox();
+            labelToken = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            labelFolderName = new System.Windows.Forms.Label();
+            labelTo = new System.Windows.Forms.Label();
+            dateTimePickerTo = new System.Windows.Forms.DateTimePicker();
+            labelFromDate = new System.Windows.Forms.Label();
+            dateTimePickerFrom = new System.Windows.Forms.DateTimePicker();
+            folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            progressBar = new System.Windows.Forms.ProgressBar();
+            panel1.SuspendLayout();
+            SuspendLayout();
             // 
             // openICSFileDialog
             // 
-            this.openICSFileDialog.FileName = "openFileDialog1";
-            // 
-            // btnSelectICSFile
-            // 
-            this.btnSelectICSFile.Location = new System.Drawing.Point(13, 29);
-            this.btnSelectICSFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnSelectICSFile.Name = "btnSelectICSFile";
-            this.btnSelectICSFile.Size = new System.Drawing.Size(137, 31);
-            this.btnSelectICSFile.TabIndex = 0;
-            this.btnSelectICSFile.Text = "Select ICS file";
-            this.btnSelectICSFile.UseVisualStyleBackColor = true;
-            this.btnSelectICSFile.Click += new System.EventHandler(this.BtnSelectICSFile_Click);
+            openICSFileDialog.FileName = "openFileDialog1";
             // 
             // btnProcessFile
             // 
-            this.btnProcessFile.Location = new System.Drawing.Point(18, 109);
-            this.btnProcessFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnProcessFile.Name = "btnProcessFile";
-            this.btnProcessFile.Size = new System.Drawing.Size(137, 31);
-            this.btnProcessFile.TabIndex = 1;
-            this.btnProcessFile.Text = "Process and save";
-            this.btnProcessFile.UseVisualStyleBackColor = true;
-            this.btnProcessFile.Click += new System.EventHandler(this.BtnProcessFile_Click);
+            btnProcessFile.Location = new System.Drawing.Point(196, 187);
+            btnProcessFile.Name = "btnProcessFile";
+            btnProcessFile.Size = new System.Drawing.Size(120, 23);
+            btnProcessFile.TabIndex = 6;
+            btnProcessFile.Text = "Process and save";
+            btnProcessFile.UseVisualStyleBackColor = true;
+            btnProcessFile.Click += btnProcessFile_Click;
             // 
-            // cbRemoveAttendees
+            // panel1
             // 
-            this.cbRemoveAttendees.AutoSize = true;
-            this.cbRemoveAttendees.Checked = true;
-            this.cbRemoveAttendees.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbRemoveAttendees.Location = new System.Drawing.Point(18, 29);
-            this.cbRemoveAttendees.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbRemoveAttendees.Name = "cbRemoveAttendees";
-            this.cbRemoveAttendees.Size = new System.Drawing.Size(174, 24);
-            this.cbRemoveAttendees.TabIndex = 2;
-            this.cbRemoveAttendees.Text = "Remove all attendees";
-            this.cbRemoveAttendees.UseVisualStyleBackColor = true;
+            panel1.Controls.Add(tbToken);
+            panel1.Controls.Add(tbDestinationFolder);
+            panel1.Controls.Add(btnProcessFile);
+            panel1.Controls.Add(tbWorkingFolder);
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(tbFolderName);
+            panel1.Controls.Add(labelToken);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(labelFolderName);
+            panel1.Controls.Add(labelTo);
+            panel1.Controls.Add(dateTimePickerTo);
+            panel1.Controls.Add(labelFromDate);
+            panel1.Controls.Add(dateTimePickerFrom);
+            panel1.Location = new System.Drawing.Point(12, 8);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(360, 227);
+            panel1.TabIndex = 7;
             // 
-            // cbAddCategory
+            // tbToken
             // 
-            this.cbAddCategory.AutoSize = true;
-            this.cbAddCategory.Checked = true;
-            this.cbAddCategory.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAddCategory.Location = new System.Drawing.Point(18, 61);
-            this.cbAddCategory.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbAddCategory.Name = "cbAddCategory";
-            this.cbAddCategory.Size = new System.Drawing.Size(121, 24);
-            this.cbAddCategory.TabIndex = 3;
-            this.cbAddCategory.Text = "Add category";
-            this.cbAddCategory.UseVisualStyleBackColor = true;
+            tbToken.Location = new System.Drawing.Point(116, 158);
+            tbToken.Name = "tbToken";
+            tbToken.Size = new System.Drawing.Size(200, 23);
+            tbToken.TabIndex = 5;
+            tbToken.Click += tbToken_Click;
+            tbToken.Leave += tbToken_Leave;
             // 
-            // lblFilename
+            // tbDestinationFolder
             // 
-            this.lblFilename.AutoSize = true;
-            this.lblFilename.Location = new System.Drawing.Point(13, 69);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Size = new System.Drawing.Size(151, 20);
-            this.lblFilename.TabIndex = 4;
-            this.lblFilename.Text = "Selected file: <none>";
+            tbDestinationFolder.Location = new System.Drawing.Point(116, 129);
+            tbDestinationFolder.Name = "tbDestinationFolder";
+            tbDestinationFolder.Size = new System.Drawing.Size(200, 23);
+            tbDestinationFolder.TabIndex = 4;
+            tbDestinationFolder.Click += tbDestinationFolder_Click;
+            tbDestinationFolder.Leave += tbDestinationFolder_Leave;
             // 
-            // groupBoxProcess
+            // tbWorkingFolder
             // 
-            this.groupBoxProcess.Controls.Add(this.tbCategory);
-            this.groupBoxProcess.Controls.Add(this.cbRemoveAttendees);
-            this.groupBoxProcess.Controls.Add(this.btnProcessFile);
-            this.groupBoxProcess.Controls.Add(this.cbAddCategory);
-            this.groupBoxProcess.Enabled = false;
-            this.groupBoxProcess.Location = new System.Drawing.Point(14, 280);
-            this.groupBoxProcess.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBoxProcess.Name = "groupBoxProcess";
-            this.groupBoxProcess.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBoxProcess.Size = new System.Drawing.Size(375, 165);
-            this.groupBoxProcess.TabIndex = 5;
-            this.groupBoxProcess.TabStop = false;
-            this.groupBoxProcess.Text = "Process";
+            tbWorkingFolder.Enabled = false;
+            tbWorkingFolder.Location = new System.Drawing.Point(116, 101);
+            tbWorkingFolder.Name = "tbWorkingFolder";
+            tbWorkingFolder.Size = new System.Drawing.Size(200, 23);
+            tbWorkingFolder.TabIndex = 3;
+            tbWorkingFolder.Leave += tbWorkingFolder_Leave;
             // 
-            // groupBoxSelectFile
+            // label2
             // 
-            this.groupBoxSelectFile.Controls.Add(this.btnSelectICSFile);
-            this.groupBoxSelectFile.Controls.Add(this.lblFilename);
-            this.groupBoxSelectFile.Location = new System.Drawing.Point(14, 152);
-            this.groupBoxSelectFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBoxSelectFile.Name = "groupBoxSelectFile";
-            this.groupBoxSelectFile.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBoxSelectFile.Size = new System.Drawing.Size(375, 120);
-            this.groupBoxSelectFile.TabIndex = 6;
-            this.groupBoxSelectFile.TabStop = false;
-            this.groupBoxSelectFile.Text = "Select file";
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(3, 161);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(41, 15);
+            label2.TabIndex = 4;
+            label2.Text = "Token:";
             // 
-            // groupBoxInfo
+            // tbFolderName
             // 
-            this.groupBoxInfo.Controls.Add(this.labelVersion);
-            this.groupBoxInfo.Controls.Add(this.linkLabelInfo);
-            this.groupBoxInfo.Location = new System.Drawing.Point(15, 36);
-            this.groupBoxInfo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBoxInfo.Name = "groupBoxInfo";
-            this.groupBoxInfo.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBoxInfo.Size = new System.Drawing.Size(374, 108);
-            this.groupBoxInfo.TabIndex = 7;
-            this.groupBoxInfo.TabStop = false;
-            this.groupBoxInfo.Text = "Info";
+            tbFolderName.Location = new System.Drawing.Point(116, 72);
+            tbFolderName.Name = "tbFolderName";
+            tbFolderName.Size = new System.Drawing.Size(200, 23);
+            tbFolderName.TabIndex = 2;
+            tbFolderName.Text = "2020BP1";
+            tbFolderName.Leave += tbFolderName_Leave;
             // 
-            // labelVersion
+            // labelToken
             // 
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(11, 56);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(64, 20);
-            this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "Version: ";
+            labelToken.AutoSize = true;
+            labelToken.Location = new System.Drawing.Point(3, 132);
+            labelToken.Name = "labelToken";
+            labelToken.Size = new System.Drawing.Size(104, 15);
+            labelToken.TabIndex = 4;
+            labelToken.Text = "Destination folder:";
             // 
-            // linkLabelInfo
+            // label1
             // 
-            this.linkLabelInfo.AutoSize = true;
-            this.linkLabelInfo.Location = new System.Drawing.Point(11, 31);
-            this.linkLabelInfo.Name = "linkLabelInfo";
-            this.linkLabelInfo.Size = new System.Drawing.Size(148, 20);
-            this.linkLabelInfo.TabIndex = 0;
-            this.linkLabelInfo.TabStop = true;
-            this.linkLabelInfo.Text = "Online documentatie";
-            this.linkLabelInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelInfo_LinkClicked);
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(3, 104);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(89, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Working folder:";
             // 
-            // tbCategory
+            // labelFolderName
             // 
-            this.tbCategory.Location = new System.Drawing.Point(145, 59);
-            this.tbCategory.Name = "tbCategory";
-            this.tbCategory.Size = new System.Drawing.Size(125, 27);
-            this.tbCategory.TabIndex = 4;
-            this.tbCategory.Text = "Xedule";
+            labelFolderName.AutoSize = true;
+            labelFolderName.Location = new System.Drawing.Point(3, 75);
+            labelFolderName.Name = "labelFolderName";
+            labelFolderName.Size = new System.Drawing.Size(63, 15);
+            labelFolderName.TabIndex = 4;
+            labelFolderName.Text = "ICS Folder:";
+            // 
+            // labelTo
+            // 
+            labelTo.AutoSize = true;
+            labelTo.Location = new System.Drawing.Point(3, 50);
+            labelTo.Name = "labelTo";
+            labelTo.Size = new System.Drawing.Size(22, 15);
+            labelTo.TabIndex = 3;
+            labelTo.Text = "To:";
+            // 
+            // dateTimePickerTo
+            // 
+            dateTimePickerTo.Location = new System.Drawing.Point(116, 44);
+            dateTimePickerTo.Name = "dateTimePickerTo";
+            dateTimePickerTo.Size = new System.Drawing.Size(200, 23);
+            dateTimePickerTo.TabIndex = 1;
+            dateTimePickerTo.ValueChanged += dateTimePickerTo_ValueChanged;
+            // 
+            // labelFromDate
+            // 
+            labelFromDate.AutoSize = true;
+            labelFromDate.Location = new System.Drawing.Point(3, 21);
+            labelFromDate.Name = "labelFromDate";
+            labelFromDate.Size = new System.Drawing.Size(38, 15);
+            labelFromDate.TabIndex = 1;
+            labelFromDate.Text = "From:";
+            // 
+            // dateTimePickerFrom
+            // 
+            dateTimePickerFrom.Location = new System.Drawing.Point(116, 15);
+            dateTimePickerFrom.Name = "dateTimePickerFrom";
+            dateTimePickerFrom.Size = new System.Drawing.Size(200, 23);
+            dateTimePickerFrom.TabIndex = 0;
+            dateTimePickerFrom.ValueChanged += dateTimePickerFrom_ValueChanged;
+            // 
+            // folderBrowserDialog
+            // 
+            folderBrowserDialog.Description = "Select folder";
+            // 
+            // progressBar
+            // 
+            progressBar.Location = new System.Drawing.Point(12, 241);
+            progressBar.Name = "progressBar";
+            progressBar.Size = new System.Drawing.Size(360, 23);
+            progressBar.TabIndex = 8;
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(421, 473);
-            this.Controls.Add(this.groupBoxInfo);
-            this.Controls.Add(this.groupBoxSelectFile);
-            this.Controls.Add(this.groupBoxProcess);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "FormMain";
-            this.Text = "Importhelper for Xedule";
-            this.groupBoxProcess.ResumeLayout(false);
-            this.groupBoxProcess.PerformLayout();
-            this.groupBoxSelectFile.ResumeLayout(false);
-            this.groupBoxSelectFile.PerformLayout();
-            this.groupBoxInfo.ResumeLayout(false);
-            this.groupBoxInfo.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(379, 271);
+            Controls.Add(progressBar);
+            Controls.Add(panel1);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Name = "FormMain";
+            Text = "ICS generator";
+            FormClosing += FormMain_FormClosing;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
 
         private System.Windows.Forms.OpenFileDialog openICSFileDialog;
-        private System.Windows.Forms.Button btnSelectICSFile;
         private System.Windows.Forms.Button btnProcessFile;
-        private System.Windows.Forms.CheckBox cbRemoveAttendees;
-        private System.Windows.Forms.CheckBox cbAddCategory;
-        private System.Windows.Forms.Label lblFilename;
-        private System.Windows.Forms.GroupBox groupBoxProcess;
-        private System.Windows.Forms.GroupBox groupBoxSelectFile;
-        private System.Windows.Forms.GroupBox groupBoxInfo;
-        private System.Windows.Forms.LinkLabel linkLabelInfo;
-        private System.Windows.Forms.Label labelVersion;
-        private System.Windows.Forms.TextBox tbCategory;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox tbWorkingFolder;
+        private System.Windows.Forms.TextBox tbFolderName;
+        private System.Windows.Forms.Label labelToken;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelFolderName;
+        private System.Windows.Forms.Label labelTo;
+        private System.Windows.Forms.DateTimePicker dateTimePickerTo;
+        private System.Windows.Forms.Label labelFromDate;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFrom;
+        private System.Windows.Forms.TextBox tbDestinationFolder;
+        private System.Windows.Forms.TextBox tbToken;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
