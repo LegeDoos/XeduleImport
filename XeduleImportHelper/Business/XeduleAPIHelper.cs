@@ -53,7 +53,6 @@ namespace XeduleImportHelper.Business
 
         public string CallApiForPeeps()
         {
-          //  return string.Empty;
             return CallApi($"https://zuyd.myx.nl/api/Attendee/Type/Teacher");
         }
 
