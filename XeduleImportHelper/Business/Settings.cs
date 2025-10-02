@@ -84,10 +84,10 @@ namespace XeduleImportHelper.Business
                     }
                 }
 
-                // get token
+                // get token - trim whitespace and newlines
                 if (File.Exists(fullPathToken))
                 {
-                    theSettings.BearerToken = File.ReadAllText(fullPathToken);
+                    theSettings.BearerToken = File.ReadAllText(fullPathToken).Trim();
                 }
                 return theSettings;
             }
@@ -116,10 +116,10 @@ namespace XeduleImportHelper.Business
                 }
             }
         
-            // write token
+            // write token - use Write instead of WriteLine to avoid adding newline
             using (StreamWriter sw = File.CreateText(fullPathToken))
             {
-                sw.WriteLine(BearerToken);
+                sw.Write(BearerToken?.Trim());
             }
         }
     }

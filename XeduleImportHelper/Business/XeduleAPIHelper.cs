@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,36 +46,29 @@ namespace XeduleImportHelper.Business
             this.toDate = toDate.ToString("yyyy-MM-dd");
         }
 
-        public string CallAPIForSchedule()
+        public async Task<string> CallAPIForSchedule()
         {
             string url = $"https://zuyd.myx.nl/api/InternetCalendar?start={fromDate}&end={toDate}&atnId={personId}";
-            return CallApi(url);          
+            return await CallApiAsync(url);
         }
 
-        public string CallApiForPeeps()
+        public async Task<string> CallApiForPeeps()
         {
-            return CallApi($"https://zuyd.myx.nl/api/Attendee/Type/Teacher");
+            return await CallApiAsync($"https://zuyd.myx.nl/api/Attendee/Type/Teacher");
         }
 
-        private string CallApi(string _url)
+        private static readonly HttpClient httpClient = new HttpClient();
+
+        private async Task<string> CallApiAsync(string url)
         {
-            var httpRequest = (HttpWebRequest)WebRequest.Create(_url);
-            httpRequest.Accept = "application/json";
-            httpRequest.Headers["Authorization"] = $"Bearer {BearerToken}";
-
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            string result;
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                result = streamReader.ReadToEnd();
-            }
-
-            if (httpResponse.StatusCode == HttpStatusCode.OK)
-            {
-                return result;
-            }
-
-            return $"{httpResponse.StatusCode}";
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {BearerToken}");
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }
