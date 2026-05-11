@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XeduleImportHelper.Business;
+using XeduleImportHelper;
 
 namespace XeduleImportHelper.UI
 {
@@ -119,6 +120,14 @@ namespace XeduleImportHelper.UI
                         .Where(t => t.Teams.Contains(19821)).Select(p => new Person { XeduleId = p.Id, Name = p.Code }).ToList();
                 }
 
+                // get groups (eenmalig ophalen voor alle personen)
+                var groupsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForGroups();
+                Groups groups = JsonSerializer.Deserialize<Groups>(groupsResult);
+
+                // get classrooms (eenmalig ophalen voor alle personen)
+                var classroomsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForClassrooms();
+                Classrooms classrooms = JsonSerializer.Deserialize<Classrooms>(classroomsResult);
+
                 // get schedule
                 progressBar.Maximum = settings.Persons.Count;
                 bool stop = false;
@@ -131,7 +140,7 @@ namespace XeduleImportHelper.UI
                         try
                         {
                             var icsResult = await new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPIForSchedule();
-                            UpdateICSFileHelper helper = new(icsResult, person.Name)
+                            UpdateICSFileHelper helper = new(icsResult, person.Name, groups.Result, classrooms.Result)
                             {
                                 ResultPath = resultPath,
                                 AddXeduleCategory = true

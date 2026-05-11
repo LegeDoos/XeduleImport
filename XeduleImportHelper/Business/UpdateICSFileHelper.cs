@@ -3,8 +3,10 @@ using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using XeduleImportHelper.Business;
 
 namespace XeduleImportHelper
 {
@@ -27,6 +29,16 @@ namespace XeduleImportHelper
         /// </summary>
         private string targetFileContent;
 
+        /// <summary>
+        /// Lookup from group id to group code
+        /// </summary>
+        private Dictionary<int, string> groupLookup = new();
+
+        /// <summary>
+        /// Lookup from classroom id to classroom code
+        /// </summary>
+        private Dictionary<int, string> classroomLookup = new();
+
         public string ResultPath { get; set; }
         public string ResultFilename { get; private set; }
 
@@ -36,8 +48,10 @@ namespace XeduleImportHelper
         /// </summary>
         /// <param name="icsFileContent">The JSON API response content</param>
         /// <param name="personName">The name of the person</param>
+        /// <param name="groups">List of groups to resolve group ids to codes</param>
+        /// <param name="classrooms">List of classrooms to resolve classroom ids to codes</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public UpdateICSFileHelper(string icsFileContent, string personName)
+        public UpdateICSFileHelper(string icsFileContent, string personName, List<Group> groups = null, List<Classroom> classrooms = null)
         {
             if (string.IsNullOrEmpty(icsFileContent))
             {
@@ -50,6 +64,18 @@ namespace XeduleImportHelper
 
             targetFileContent = icsFileContent;
             ResultFilename = $"{personName}_{DateTime.Now:yyyyMMddHHmmss}_result.ics";
+
+            if (groups != null)
+            {
+                foreach (var g in groups)
+                    groupLookup[g.Id] = g.Code;
+            }
+
+            if (classrooms != null)
+            {
+                foreach (var c in classrooms)
+                    classroomLookup[c.Id] = c.Code;
+            }
         }
 
         /// <summary>
@@ -63,7 +89,7 @@ namespace XeduleImportHelper
                 throw new Exception("No source defined");
             }
 
-            var calendar = BuildCalendarFromJson(targetFileContent);
+            var calendar = BuildCalendarFromJson(targetFileContent, groupLookup, classroomLookup);
 
             // apply options
             if (AddXeduleCategory)
@@ -95,7 +121,7 @@ namespace XeduleImportHelper
         /// <summary>
         /// Builds a Calendar from the JSON response of the new Appointment API.
         /// </summary>
-        private static Calendar BuildCalendarFromJson(string json)
+        private static Calendar BuildCalendarFromJson(string json, Dictionary<int, string> groupLookup, Dictionary<int, string> classroomLookup)
         {
             var calendar = new Calendar();
 
@@ -126,18 +152,76 @@ namespace XeduleImportHelper
                         continue;
                     }
 
+                    string code = appt.TryGetProperty("code", out var codeProp)
+                        ? codeProp.GetString() ?? string.Empty
+                        : string.Empty;
+
                     string summary = appt.TryGetProperty("summary", out var summaryProp)
                         ? summaryProp.GetString() ?? string.Empty
                         : (appt.TryGetProperty("name", out var nameProp) ? nameProp.GetString() ?? string.Empty : string.Empty);
+
+                    string published = appt.TryGetProperty("published", out var publishedProp)
+                        ? publishedProp.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    string publishedBy = appt.TryGetProperty("publishedBy", out var publishedByProp)
+                        ? publishedByProp.GetString() ?? string.Empty
+                        : string.Empty;
 
                     string uid = appt.TryGetProperty("id", out var idProp)
                         ? idProp.GetInt64().ToString()
                         : Guid.NewGuid().ToString();
 
+                    // Resolve group ids to codes
+                    var groupCodes = new List<string>();
+                    appt.TryGetProperty("attendeeIds", out var attendeeIds);
+                    if (attendeeIds.ValueKind == JsonValueKind.Object &&
+                        attendeeIds.TryGetProperty("group", out var groupIds))
+                    {
+                        foreach (var gid in groupIds.EnumerateArray())
+                        {
+                            int id = gid.GetInt32();
+                            if (groupLookup.TryGetValue(id, out var gCode))
+                                groupCodes.Add(gCode);
+                        }
+                    }
+
+                    // Resolve classroom ids to codes
+                    var classroomCodes = new List<string>();
+                    if (attendeeIds.ValueKind != JsonValueKind.Undefined &&
+                        attendeeIds.TryGetProperty("classroom", out var classroomIds))
+                    {
+                        foreach (var cid in classroomIds.EnumerateArray())
+                        {
+                            int id = cid.GetInt32();
+                            if (classroomLookup.TryGetValue(id, out var cCode))
+                                classroomCodes.Add(cCode);
+                        }
+                    }
+
+                    string classroomsText = classroomCodes.Count > 0 ? string.Join(", ", classroomCodes) : string.Empty;
+
+                    string groupsText = groupCodes.Count > 0 ? string.Join(", ", groupCodes) : string.Empty;
+                    string title = string.IsNullOrEmpty(groupsText) ? code : $"{code} | {groupsText}";
+
+                    var bodyLines = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(summary))
+                        bodyLines.AppendLine($"Omschrijving: {summary}");
+                    if (!string.IsNullOrEmpty(groupsText))
+                        bodyLines.AppendLine($"Groep(en): {groupsText}");
+                    if (!string.IsNullOrEmpty(classroomsText))
+                        bodyLines.AppendLine($"Lokaal: {classroomsText}");
+                    if (!string.IsNullOrEmpty(published) && DateTime.TryParse(published, out var publishedDate))
+                        bodyLines.AppendLine($"Gepubliceerd: {publishedDate:dd-MM-yyyy HH:mm}");
+                    if (!string.IsNullOrEmpty(publishedBy))
+                        bodyLines.AppendLine($"Gepubliceerd door: {publishedBy}");
+
                     var calEvent = new CalendarEvent
                     {
                         Uid = uid,
-                        Summary = summary,
+                        Summary = title,
+                        Location = classroomsText,
+                        Description = bodyLines.ToString().TrimEnd(),
                         DtStart = new CalDateTime(start),
                         DtEnd = new CalDateTime(end)
                     };

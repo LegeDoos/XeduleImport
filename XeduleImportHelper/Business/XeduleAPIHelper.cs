@@ -57,6 +57,16 @@ namespace XeduleImportHelper.Business
             return await CallApiAsync($"https://zuyd.myx.nl/api/Attendee/Type/Teacher");
         }
 
+        public async Task<string> CallApiForGroups()
+        {
+            return await CallApiAsync($"https://zuyd.myx.nl/api/Attendee/Type/Group");
+        }
+
+        public async Task<string> CallApiForClassrooms()
+        {
+            return await CallApiAsync($"https://zuyd.myx.nl/api/Attendee/Type/Classroom");
+        }
+
         private static readonly HttpClient httpClient = new HttpClient();
 
         private async Task<string> CallApiAsync(string url)
