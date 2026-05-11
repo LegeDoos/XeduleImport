@@ -1,12 +1,10 @@
 ﻿using Ical.Net;
+using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace XeduleImportHelper
 {
@@ -23,45 +21,20 @@ namespace XeduleImportHelper
         /// The category id to set
         /// </summary>
         public string CustomCategory { get; set; } = "Xedule";
-        /// <summary>
-        /// Remove all attendees in the file if true
-        /// </summary>
-        public bool RemoveAllAttendees { get; set; } = true;
-        /// <summary>
-        /// The sourcefile to edit
-        /// </summary>
-        private string SourceICSFile { get; set; }
-
 
         /// <summary>
         /// Content of the ICS file
         /// </summary>
         private string targetFileContent;
 
-
-        public string ResultPath { get; set; } 
+        public string ResultPath { get; set; }
         public string ResultFilename { get; private set; }
 
 
         /// <summary>
-        /// Constructor to construct the helper class based on a given file
+        /// Constructor to construct the helper class based on the JSON API response content.
         /// </summary>
-        /// <param name="_sourceFile">The sourcefile to edit</param>
-        public UpdateICSFileHelper(string _sourceFile)
-        {
-            if (!string.IsNullOrEmpty(_sourceFile))
-            {
-                SourceICSFile = _sourceFile;
-            }
-            ResultFilename = $"{DateTime.Now:yyyyMMddHHmmss}_result.ics";
-            ResultPath = Path.GetDirectoryName(SourceICSFile);
-    }
-
-
-        /// <summary>
-        /// Constructor to construct the helper class based on the ics file content
-        /// </summary>
-        /// <param name="icsFileContent">The ICS file content</param>
+        /// <param name="icsFileContent">The JSON API response content</param>
         /// <param name="personName">The name of the person</param>
         /// <exception cref="ArgumentNullException"></exception>
         public UpdateICSFileHelper(string icsFileContent, string personName)
@@ -85,48 +58,19 @@ namespace XeduleImportHelper
         /// <returns>The path to the new file</returns>
         public string HandleFile()
         {
-            // check file
-            if (!string.IsNullOrEmpty(SourceICSFile))
-            {
-                try
-                {
-                    targetFileContent = File.ReadAllText(SourceICSFile);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Error reading file {SourceICSFile}", ex);
-                }
-            }
-
             if (string.IsNullOrEmpty(targetFileContent))
             {
                 throw new Exception("No source defined");
             }
 
-            // Deserialize
-            Calendar calendar;
-            try
-            {
-                calendar = Calendar.Load(targetFileContent);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error deserializing calendar", ex);
-            }
+            var calendar = BuildCalendarFromJson(targetFileContent);
 
-            // remove all attendees
-            if (calendar != null && (RemoveAllAttendees || AddXeduleCategory))
+            // apply options
+            if (AddXeduleCategory)
             {
                 foreach (var e in calendar.Events)
                 {
-                    if (RemoveAllAttendees)
-                    {
-                        e.Attendees.Clear();
-                    }
-                    if (AddXeduleCategory)
-                    {
-                        e.Categories.Add(this.CustomCategory);
-                    }
+                    e.Categories.Add(this.CustomCategory);
                 }
             }
 
@@ -146,6 +90,67 @@ namespace XeduleImportHelper
 
             ResultFilename = newFile;
             return newFile;
+        }
+
+        /// <summary>
+        /// Builds a Calendar from the JSON response of the new Appointment API.
+        /// </summary>
+        private static Calendar BuildCalendarFromJson(string json)
+        {
+            var calendar = new Calendar();
+
+            try
+            {
+                using var doc = JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                if (!root.TryGetProperty("result", out var result) ||
+                    !result.TryGetProperty("appointments", out var appointments))
+                {
+                    return calendar;
+                }
+
+                foreach (var appointmentEntry in appointments.EnumerateObject())
+                {
+                    var appt = appointmentEntry.Value;
+
+                    if (!appt.TryGetProperty("start", out var startProp) ||
+                        !appt.TryGetProperty("end", out var endProp))
+                    {
+                        continue;
+                    }
+
+                    if (!DateTime.TryParse(startProp.GetString(), out var start) ||
+                        !DateTime.TryParse(endProp.GetString(), out var end))
+                    {
+                        continue;
+                    }
+
+                    string summary = appt.TryGetProperty("summary", out var summaryProp)
+                        ? summaryProp.GetString() ?? string.Empty
+                        : (appt.TryGetProperty("name", out var nameProp) ? nameProp.GetString() ?? string.Empty : string.Empty);
+
+                    string uid = appt.TryGetProperty("id", out var idProp)
+                        ? idProp.GetInt64().ToString()
+                        : Guid.NewGuid().ToString();
+
+                    var calEvent = new CalendarEvent
+                    {
+                        Uid = uid,
+                        Summary = summary,
+                        DtStart = new CalDateTime(start),
+                        DtEnd = new CalDateTime(end)
+                    };
+
+                    calendar.Events.Add(calEvent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error parsing JSON appointment response", ex);
+            }
+
+            return calendar;
         }
     }
 }

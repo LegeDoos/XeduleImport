@@ -48,7 +48,7 @@ namespace XeduleImportHelper.Business
 
         public async Task<string> CallAPIForSchedule()
         {
-            string url = $"https://zuyd.myx.nl/api/InternetCalendar?start={fromDate}&end={toDate}&atnId={personId}";
+            string url = $"https://zuyd.myx.nl/api/Appointment/Date/{fromDate}/{toDate}/Attendee?id={personId}";
             return await CallApiAsync(url);
         }
 

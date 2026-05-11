@@ -134,7 +134,6 @@ namespace XeduleImportHelper.UI
                             UpdateICSFileHelper helper = new(icsResult, person.Name)
                             {
                                 ResultPath = resultPath,
-                                RemoveAllAttendees = true,
                                 AddXeduleCategory = true
                             };
                             var res = helper.HandleFile();

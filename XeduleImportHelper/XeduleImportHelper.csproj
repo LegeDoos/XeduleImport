@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ical.Net" Version="5.1.0" />
+    <PackageReference Include="Ical.Net" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
