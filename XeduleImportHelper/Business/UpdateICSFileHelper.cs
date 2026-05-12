@@ -25,7 +25,7 @@ namespace XeduleImportHelper
         public string CustomCategory { get; set; } = "Xedule";
 
         /// <summary>
-        /// Content of the ICS file
+        /// JSON API response content from the Appointment endpoint
         /// </summary>
         private string targetFileContent;
 
@@ -46,23 +46,23 @@ namespace XeduleImportHelper
         /// <summary>
         /// Constructor to construct the helper class based on the JSON API response content.
         /// </summary>
-        /// <param name="icsFileContent">The JSON API response content</param>
+        /// <param name="appointmentJsonContent">The JSON API response content from the Appointment endpoint</param>
         /// <param name="personName">The name of the person</param>
         /// <param name="groups">List of groups to resolve group ids to codes</param>
         /// <param name="classrooms">List of classrooms to resolve classroom ids to codes</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public UpdateICSFileHelper(string icsFileContent, string personName, List<Group> groups = null, List<Classroom> classrooms = null)
+        public UpdateICSFileHelper(string appointmentJsonContent, string personName, List<Group> groups = null, List<Classroom> classrooms = null)
         {
-            if (string.IsNullOrEmpty(icsFileContent))
+            if (string.IsNullOrEmpty(appointmentJsonContent))
             {
-                throw new ArgumentNullException(nameof(icsFileContent));
+                throw new ArgumentNullException(nameof(appointmentJsonContent));
             }
             if (string.IsNullOrEmpty(personName))
             {
                 throw new ArgumentNullException(nameof(personName));
             }
 
-            targetFileContent = icsFileContent;
+            targetFileContent = appointmentJsonContent;
             ResultFilename = $"{personName}_{DateTime.Now:yyyyMMddHHmmss}_result.ics";
 
             if (groups != null)
@@ -176,7 +176,8 @@ namespace XeduleImportHelper
                     var groupCodes = new List<string>();
                     appt.TryGetProperty("attendeeIds", out var attendeeIds);
                     if (attendeeIds.ValueKind == JsonValueKind.Object &&
-                        attendeeIds.TryGetProperty("group", out var groupIds))
+                        attendeeIds.TryGetProperty("group", out var groupIds) &&
+                        groupIds.ValueKind == JsonValueKind.Array)
                     {
                         foreach (var gid in groupIds.EnumerateArray())
                         {
@@ -188,8 +189,9 @@ namespace XeduleImportHelper
 
                     // Resolve classroom ids to codes
                     var classroomCodes = new List<string>();
-                    if (attendeeIds.ValueKind != JsonValueKind.Undefined &&
-                        attendeeIds.TryGetProperty("classroom", out var classroomIds))
+                    if (attendeeIds.ValueKind == JsonValueKind.Object &&
+                        attendeeIds.TryGetProperty("classroom", out var classroomIds) &&
+                        classroomIds.ValueKind == JsonValueKind.Array)
                     {
                         foreach (var cid in classroomIds.EnumerateArray())
                         {
