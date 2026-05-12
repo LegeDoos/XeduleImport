@@ -122,11 +122,13 @@ namespace XeduleImportHelper.UI
 
                 // get groups (eenmalig ophalen voor alle personen)
                 var groupsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForGroups();
-                Groups groups = JsonSerializer.Deserialize<Groups>(groupsResult);
+                var groups = JsonSerializer.Deserialize<Groups>(groupsResult)?.Result
+                    ?? throw new InvalidOperationException("Could not deserialize groups response from the Xedule API.");
 
                 // get classrooms (eenmalig ophalen voor alle personen)
                 var classroomsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForClassrooms();
-                Classrooms classrooms = JsonSerializer.Deserialize<Classrooms>(classroomsResult);
+                var classrooms = JsonSerializer.Deserialize<Classrooms>(classroomsResult)?.Result
+                    ?? throw new InvalidOperationException("Could not deserialize classrooms response from the Xedule API.");
 
                 // get schedule
                 progressBar.Maximum = settings.Persons.Count;
@@ -140,7 +142,7 @@ namespace XeduleImportHelper.UI
                         try
                         {
                             var icsResult = await new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPIForSchedule();
-                            UpdateICSFileHelper helper = new(icsResult, person.Name, groups.Result, classrooms.Result)
+                            UpdateICSFileHelper helper = new(icsResult, person.Name, groups, classrooms)
                             {
                                 ResultPath = resultPath,
                                 AddXeduleCategory = true
