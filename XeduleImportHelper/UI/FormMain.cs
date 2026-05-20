@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using XeduleImportHelper.Business;
 
@@ -119,6 +117,16 @@ namespace XeduleImportHelper.UI
                         .Where(t => t.Teams.Contains(19821)).Select(p => new Person { XeduleId = p.Id, Name = p.Code }).ToList();
                 }
 
+                // get groups (eenmalig ophalen voor alle personen)
+                var groupsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForGroups();
+                var groups = JsonSerializer.Deserialize<Groups>(groupsResult)?.Result
+                    ?? throw new InvalidOperationException("Could not deserialize groups response from the Xedule API.");
+
+                // get classrooms (eenmalig ophalen voor alle personen)
+                var classroomsResult = await new XeduleAPIHelper() { BearerToken = settings.BearerToken }.CallApiForClassrooms();
+                var classrooms = JsonSerializer.Deserialize<Classrooms>(classroomsResult)?.Result
+                    ?? throw new InvalidOperationException("Could not deserialize classrooms response from the Xedule API.");
+
                 // get schedule
                 progressBar.Maximum = settings.Persons.Count;
                 bool stop = false;
@@ -131,10 +139,9 @@ namespace XeduleImportHelper.UI
                         try
                         {
                             var icsResult = await new XeduleAPIHelper(settings.FromDate, settings.ToDate, person.XeduleId) { BearerToken = settings.BearerToken }.CallAPIForSchedule();
-                            UpdateICSFileHelper helper = new(icsResult, person.Name)
+                            UpdateICSFileHelper helper = new(icsResult, person.Name, groups, classrooms)
                             {
                                 ResultPath = resultPath,
-                                RemoveAllAttendees = true,
                                 AddXeduleCategory = true
                             };
                             var res = helper.HandleFile();

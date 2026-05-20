@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace XeduleImportHelper.Business
 {
-    /// <summary>
-    /// helper class to deserialize the teachers from Xedule
-    /// </summary>
-    public class Teacher
+    public class Group
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -14,7 +11,11 @@ namespace XeduleImportHelper.Business
         public string Code { get; set; }
         [JsonPropertyName("role")]
         public string Role { get; set; }
-        [JsonPropertyName("teams")]
-        public List<int> Teams { get; set; }
+    }
+
+    public class Groups
+    {
+        [JsonPropertyName("result")]
+        public List<Group> Result { get; set; }
     }
 }

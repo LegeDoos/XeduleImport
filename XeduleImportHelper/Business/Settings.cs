@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace XeduleImportHelper.Business
 {
@@ -35,14 +31,14 @@ namespace XeduleImportHelper.Business
         public List<Person> Persons { get; set; }
 
         public string WorkingFolder { get; set; }
-        
+
         const string fileNameSettings = "_setting.json";
-        const string fileNamePeeps = "_peeps.txt"; 
+        const string fileNamePeeps = "_peeps.txt";
         const string fileNameToken = "_token.txt";
 
 
         public Settings()
-        {    
+        {
         }
 
         public Settings(string _workingFolder)
@@ -53,7 +49,7 @@ namespace XeduleImportHelper.Business
         // data access
 
         public static Settings ReadSettings(string _workingFolder)
-        { 
+        {
             string fullPathSettings = Path.Combine(_workingFolder, fileNameSettings);
             string fullPathPeeps = Path.Combine(_workingFolder, fileNamePeeps);
             string fullPathToken = Path.Combine(_workingFolder, fileNameToken);
@@ -115,7 +111,7 @@ namespace XeduleImportHelper.Business
                     sw.WriteLine($"{peep.XeduleId};{peep.Name.ToLower()}");
                 }
             }
-        
+
             // write token - use Write instead of WriteLine to avoid adding newline
             using (StreamWriter sw = File.CreateText(fullPathToken))
             {
