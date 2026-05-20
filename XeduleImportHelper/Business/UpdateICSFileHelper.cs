@@ -28,7 +28,10 @@ namespace XeduleImportHelper
         /// JSON API response content from the Appointment endpoint
         /// </summary>
         private string targetFileContent;
-
+        /// <summary>
+        /// Targe filename for the new file. Will be generated based on the person name and current timestamp.
+        /// </summary>
+        private string resultFilename;
         /// <summary>
         /// Lookup from group id to group code
         /// </summary>
@@ -38,9 +41,11 @@ namespace XeduleImportHelper
         /// Lookup from classroom id to classroom code
         /// </summary>
         private Dictionary<int, string> classroomLookup = new();
-
+        /// <summary>
+        /// Gets or sets the file system path where the result is stored.
+        /// </summary>
         public string ResultPath { get; set; }
-        public string ResultFilename { get; private set; }
+
 
 
         /// <summary>
@@ -63,7 +68,7 @@ namespace XeduleImportHelper
             }
 
             targetFileContent = appointmentJsonContent;
-            ResultFilename = $"{personName}_{DateTime.Now:yyyyMMddHHmmss}_result.ics";
+            resultFilename = $"{personName}_{DateTime.Now:yyyyMMddHHmmss}_result.ics";
 
             if (groups != null)
             {
@@ -104,7 +109,7 @@ namespace XeduleImportHelper
             string newFile;
             try
             {
-                newFile = $"{ResultPath}\\{ResultFilename}";
+                newFile = $"{ResultPath}\\{resultFilename}";
                 var serializer = new CalendarSerializer();
                 var serializedCalendar = serializer.SerializeToString(calendar);
                 File.WriteAllText(newFile, serializedCalendar);
@@ -114,7 +119,6 @@ namespace XeduleImportHelper
                 throw new Exception("Error saving the new file", ex);
             }
 
-            ResultFilename = newFile;
             return newFile;
         }
 
