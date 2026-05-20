@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace XeduleImportHelper.Business
 {
@@ -19,7 +11,7 @@ namespace XeduleImportHelper.Business
         readonly string toDate = string.Empty;
         readonly int personId;
 
-        public string BearerToken  { private get; set; }
+        public string BearerToken { private get; set; }
 
         /// <summary>
         /// default constructor
@@ -74,10 +66,10 @@ namespace XeduleImportHelper.Business
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {BearerToken}");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            
+
             return await response.Content.ReadAsStringAsync();
         }
     }

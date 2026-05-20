@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace XeduleImportHelper.Business
 {
@@ -20,6 +15,6 @@ namespace XeduleImportHelper.Business
         [JsonPropertyName("role")]
         public string Role { get; set; }
         [JsonPropertyName("teams")]
-        public List<int> Teams{ get; set; }
+        public List<int> Teams { get; set; }
     }
 }
